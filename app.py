@@ -1,5 +1,6 @@
 import threading
-from udp_listener import start_udp_listener
+#from udp_listener import start_udp_listener
+from tcp_listener import start_tcp_listener, telemetry_queue
 from dashboard_layout import app, update_dashboard
 from mjpeg_server import start_mjpeg_server, start_camera_stream
 
@@ -24,8 +25,12 @@ if __name__ == "__main__":
     threading.Thread(target=start_camera_stream, daemon=True).start()
 
     # Start the UDP listener in a separate thread
-    udp_thread = threading.Thread(target=start_udp_listener, daemon=True)
-    udp_thread.start()
+    #udp_thread = threading.Thread(target=start_udp_listener, daemon=True)
+    #udp_thread.start()
+
+    # Start the TCP listener in a separate thread
+    tcp_thread = threading.Thread(target=start_tcp_listener, daemon=True)
+    tcp_thread.start()
 
     # Start the Dash app
     start_dash()
