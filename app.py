@@ -7,7 +7,7 @@ from mjpeg_server import start_mjpeg_server, start_camera_stream
 def start_mjpeg():
     """Start the MJPEG server."""
     try:
-        start_mjpeg_server(port=8081)
+        start_mjpeg_server(port=8080)
     except Exception as e:
         print(f"Error starting MJPEG server: {e}")
 

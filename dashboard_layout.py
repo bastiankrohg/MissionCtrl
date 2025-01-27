@@ -3,10 +3,12 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Output, Input
 import json
 import time
+import requests
 from queue import Empty
 from collections import deque
 #from udp_listener import telemetry_queue 
 from tcp_listener import telemetry_queue
+from mjpeg_server import VIDEO_SOURCE
 
 # Initialize Dash app
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -30,18 +32,27 @@ app.layout = html.Div([
         html.Div(id="backend-status", className="text-center my-2", style={"font-size": "1.5em", "font-weight": "bold"}),
         dbc.Row([
             dbc.Col(dcc.Graph(id="path-trace", style={"height": "500px"}), width=6),
-            dbc.Col(html.Div([
-                html.Div("Live Video Feed", style={"text-align": "center", "font-size": "20px", "margin-bottom": "10px"}),
-                html.Div(
-                    children=[
-                        html.Img(
-                            src="http://127.0.0.1:8081/",
-                            style={"width": "100%", "height": "100%", "object-fit": "contain", "border": "1px solid black"}
-                        )
-                    ],
-                    style={"height": "500px", "background-color": "lightgray"}
-                )
-            ]), width=6),
+            dbc.Col(
+                html.Div([
+                    html.Div(
+                        "Live Video Feed",
+                        style={
+                            "text-align": "center",
+                            "font-size": "20px",
+                            "margin-bottom": "10px",
+                        },
+                    ),
+                    html.Iframe(
+                        src="http://192.168.0.169:8080/stream",
+                        style={
+                            "width": "100%",
+                            "height": "500px",
+                            "border": "1px solid black",
+                        },
+                    ),
+                ]),
+                width=6,
+            ),
         ], className="mb-4"),
         dbc.Row([
             dbc.Col(html.Div(id="system-state-display", style={"padding": "10px"}), width=3),

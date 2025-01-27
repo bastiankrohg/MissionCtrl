@@ -3,7 +3,8 @@ import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 # URL of the DroidCam stream
-VIDEO_SOURCE = "http://192.168.0.37:4747/video"
+#VIDEO_SOURCE = "http://192.168.0.37:4747/video"
+VIDEO_SOURCE = "http://192.168.0.169:8080/stream"
 
 # Shared resource for frames
 frame_lock = threading.Lock()
@@ -70,4 +71,4 @@ def start_camera_stream():
 if __name__ == "__main__":
     # Start the camera stream and MJPEG server
     threading.Thread(target=start_camera_stream, daemon=True).start()
-    start_mjpeg_server(port=8081)
+    start_mjpeg_server(port=8080)
