@@ -5,7 +5,8 @@ import json
 import time
 from queue import Empty
 from collections import deque
-from udp_listener import telemetry_queue  # Correct import
+#from udp_listener import telemetry_queue 
+from tcp_listener import telemetry_queue
 
 # Initialize Dash app
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])

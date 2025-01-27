@@ -2,13 +2,25 @@ import socket
 import threading
 from queue import Queue
 
-# Configuration for TCP communication
+# Configuration for TCP communication (Coral board → Mission Control)
 TCP_IP = "127.0.0.1"  # Replace with the Coral board's IP if needed
-# TCP_PORT = 50055
 TCP_PORT = 60066
+
+# Configuration for local UDP retransmission (Mission Control → Dashboard/Local services)
+LOCAL_UDP_IP = "127.0.0.1"
+LOCAL_UDP_PORT = 60000
 
 # Shared queue for telemetry data
 telemetry_queue = Queue()
+
+def retransmit_to_local_udp(data):
+    """Retransmit data to the local UDP port."""
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp_socket:
+        try:
+            udp_socket.sendto(data.encode("utf-8"), (LOCAL_UDP_IP, LOCAL_UDP_PORT))
+            print(f"Retransmitted data to {LOCAL_UDP_IP}:{LOCAL_UDP_PORT}")
+        except Exception as e:
+            print(f"Error retransmitting data: {e}")
 
 def start_tcp_listener():
     """Start a TCP listener for incoming telemetry messages."""
@@ -29,6 +41,10 @@ def start_tcp_listener():
                     telemetry_data = data.decode("utf-8")
                     telemetry_queue.put(telemetry_data)  # Add to the queue
                     print(f"Received telemetry: {telemetry_data}")
+
+                    # Retransmit data to local UDP
+                    retransmit_to_local_udp(telemetry_data)
+
                 except Exception as e:
                     print(f"Error receiving data: {e}")
                     break
