@@ -4,7 +4,8 @@ from queue import Queue
 
 # Configuration for TCP communication
 TCP_IP = "127.0.0.1"  # Replace with the Coral board's IP if needed
-TCP_PORT = 50055
+# TCP_PORT = 50055
+TCP_PORT = 60066
 
 # Shared queue for telemetry data
 telemetry_queue = Queue()
